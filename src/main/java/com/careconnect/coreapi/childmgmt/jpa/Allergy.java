@@ -1,14 +1,13 @@
 package com.careconnect.coreapi.childmgmt.jpa;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,8 +15,9 @@ import java.time.Instant;
 @Table(name = "allergies")
 public class Allergy {
     @Id
-    @Column(name = "id", nullable = false, length = Integer.MAX_VALUE)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false)
+    private UUID id;
 
     @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
     private String name;
