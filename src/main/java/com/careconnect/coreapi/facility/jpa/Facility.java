@@ -1,14 +1,9 @@
 package com.careconnect.coreapi.facility.jpa;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -19,31 +14,32 @@ import java.util.UUID;
 @Table(name = "facilities")
 public class Facility {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @ColumnDefault("gen_random_uuid()")
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
     private String name;
 
-    @Column(name = "address", length = Integer.MAX_VALUE)
-    private String address;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id", unique = true)
+    private Address address;
 
     @Column(name = "phone", length = Integer.MAX_VALUE)
     private String phone;
 
-    @Column(name = "\"licenseNumber\"", length = Integer.MAX_VALUE)
+    @Column(name = "license_number", length = Integer.MAX_VALUE)
     private String licenseNumber;
 
-    @Column(name = "\"maxCapacity\"")
+    @Column(name = "max_capacity")
     private Integer maxCapacity;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "\"createdAt\"", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "\"updatedAt\"", nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
 }

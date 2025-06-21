@@ -1,10 +1,9 @@
-package com.careconnect.coreapi.childmgmt.jpa;
+package com.careconnect.coreapi.reports.jpa;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -12,22 +11,20 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "allergies")
-public class Allergy {
+@Table(name = "reports")
+public class Report {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @ColumnDefault("gen_random_uuid()")
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "id")
     private UUID id;
 
-    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
-    private String name;
+    @Column(name = "report_type", nullable = false, length = 255)
+    private String reportType;
 
-    @Column(name = "description", length = Integer.MAX_VALUE)
-    private String description;
-
-    @Column(name = "severity", length = Integer.MAX_VALUE)
-    private String severity;
+    @Column(name = "report_data", nullable = false, length = Integer.MAX_VALUE)
+    private String reportData;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", nullable = false)
@@ -35,5 +32,6 @@ public class Allergy {
 
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+
 
 }

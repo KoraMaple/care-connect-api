@@ -19,31 +19,32 @@ import java.util.UUID;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @ColumnDefault("gen_random_uuid()")
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "\"billingId\"", nullable = false)
+    @JoinColumn(name = "billing_id", nullable = false)
     private Billing billing;
 
     @Column(name = "amount", precision = 65, scale = 30)
     private BigDecimal amount;
 
-    @Column(name = "\"paymentDate\"")
+    @Column(name = "payment_date")
     private Instant paymentDate;
 
-    @Column(name = "\"paymentMethod\"", length = Integer.MAX_VALUE)
+    @Column(name = "payment_method", length = Integer.MAX_VALUE)
     private String paymentMethod;
 
-    @Column(name = "\"transactionId\"", length = Integer.MAX_VALUE)
+    @Column(name = "transaction_id", length = Integer.MAX_VALUE)
     private String transactionId;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "\"createdAt\"", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "\"updatedAt\"", nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
 }

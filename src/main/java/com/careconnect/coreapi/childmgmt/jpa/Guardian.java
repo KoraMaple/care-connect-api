@@ -1,5 +1,6 @@
-package com.careconnect.coreapi.user.jpa;
+package com.careconnect.coreapi.childmgmt.jpa;
 
+import com.careconnect.coreapi.user.jpa.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,29 +18,30 @@ import java.util.UUID;
 public class Guardian {
     @Id
     @Column(name = "id", nullable = false)
+    @ColumnDefault("gen_random_uuid()")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "\"userId\"", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "relationship", nullable = false, length = Integer.MAX_VALUE)
     private String relationship;
 
-    @Column(name = "\"emergencyContact\"", length = Integer.MAX_VALUE)
+    @Column(name = "emergency_contact", length = Integer.MAX_VALUE)
     private String emergencyContact;
 
     @ColumnDefault("false")
-    @Column(name = "\"pickupAuthorized\"", nullable = false)
+    @Column(name = "pickup_authorized", nullable = false)
     private Boolean pickupAuthorized = false;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "\"createdAt\"", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "\"updatedAt\"", nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,19 +17,19 @@ import java.util.UUID;
 @Table(name = "messages")
 public class Message {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @ColumnDefault("gen_random_uuid()")
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "\"senderId\"", nullable = false)
+    @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "\"recipientId\"", nullable = false)
+    @JoinColumn(name = "recipient_id", nullable = false)
     private User recipient;
 
     @Column(name = "subject", length = Integer.MAX_VALUE)
@@ -40,14 +39,14 @@ public class Message {
     private String content;
 
     @ColumnDefault("false")
-    @Column(name = "\"readStatus\"", nullable = false)
+    @Column(name = "read_status", nullable = false)
     private Boolean readStatus = false;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "\"createdAt\"", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "\"updatedAt\"", nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
 }
