@@ -1,0 +1,38 @@
+ALTER TABLE allergies
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE attendance
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE billing
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE child_allergies
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE child_guardians
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE children
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE enrollments
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE facilities
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE guardians
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE messages
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE payments
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE reports
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+ALTER TABLE users
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();

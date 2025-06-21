@@ -1,0 +1,83 @@
+name: CI - Code and Secrets Scanning
+
+on:
+  push:
+    branches: ["*"]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - 'LICENSE'
+  pull_request:
+    branches: [main, master]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - 'LICENSE'
+
+jobs:
+  codeql-scan:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'java'
+          queries: security-and-quality
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:java"
+          upload: always
+
+  secrets-scan:
+    name: Secrets Scan (truffleHog)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run truffleHog OSS
+        uses: trufflesecurity/trufflehog@v3.76.3
+        with:
+          scanArguments: >-
+            --no-update 
+            --json 
+            --fail 
+            --only-verified 
+            --exclude-paths .github/trufflehog-excludes.txt 
+            git file://. --since-commit HEAD~1
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
+
+      - name: Upload truffleHog scan results
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trufflehog-results
+          path: trufflehog-results.json
+          retention-days: 5
