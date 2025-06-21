@@ -19,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "clerk_user_id", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "clerk_user_id", nullable = false, length = 255)
     private String clerkUserId;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
