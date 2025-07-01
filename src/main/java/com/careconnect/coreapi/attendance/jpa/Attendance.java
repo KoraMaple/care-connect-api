@@ -1,13 +1,10 @@
 package com.careconnect.coreapi.attendance.jpa;
 
-import com.careconnect.coreapi.childmgmt.jpa.Child;
 import com.careconnect.coreapi.facility.Facility;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -23,10 +20,8 @@ public class Attendance {
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "child_id", nullable = false)
-    private Child child;
+    @Column(name = "child_id", nullable = false)
+    private UUID childId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "facility_id")

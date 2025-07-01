@@ -1,4 +1,4 @@
-package com.careconnect.coreapi.communications.jpa;
+package com.careconnect.coreapi.communications.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

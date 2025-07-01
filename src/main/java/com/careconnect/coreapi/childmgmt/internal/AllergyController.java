@@ -1,8 +1,8 @@
 package com.careconnect.coreapi.childmgmt.internal;
 
-import com.careconnect.coreapi.childmgmt.jpa.Allergy;
-import com.careconnect.coreapi.childmgmt.jpa.ChildAllergy;
-import com.careconnect.coreapi.childmgmt.service.AllergyService;
+import com.careconnect.coreapi.childmgmt.domain.Allergy;
+import com.careconnect.coreapi.childmgmt.domain.ChildAllergy;
+import com.careconnect.coreapi.childmgmt.internal.AllergyService;
 import com.careconnect.coreapi.common.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

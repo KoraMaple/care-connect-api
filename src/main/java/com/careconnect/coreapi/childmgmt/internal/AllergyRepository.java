@@ -1,6 +1,6 @@
 package com.careconnect.coreapi.childmgmt.internal;
 
-import com.careconnect.coreapi.childmgmt.jpa.Allergy;
+import com.careconnect.coreapi.childmgmt.domain.Allergy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

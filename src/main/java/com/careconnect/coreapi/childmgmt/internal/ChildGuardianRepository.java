@@ -1,6 +1,6 @@
 package com.careconnect.coreapi.childmgmt.internal;
 
-import com.careconnect.coreapi.childmgmt.jpa.ChildGuardian;
+import com.careconnect.coreapi.childmgmt.domain.ChildGuardian;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
