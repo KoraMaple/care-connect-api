@@ -1,6 +1,6 @@
-package com.careconnect.coreapi.user.repository;
+package com.careconnect.coreapi.user.internal;
 
-import com.careconnect.coreapi.user.jpa.User;
+import com.careconnect.coreapi.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

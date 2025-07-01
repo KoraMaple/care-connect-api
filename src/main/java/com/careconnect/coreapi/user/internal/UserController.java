@@ -1,4 +1,4 @@
-package com.careconnect.coreapi.user.controller;
+package com.careconnect.coreapi.user.internal;
 
 import java.util.Map;
 

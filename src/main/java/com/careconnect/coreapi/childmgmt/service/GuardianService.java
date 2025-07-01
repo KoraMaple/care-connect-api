@@ -4,8 +4,8 @@ import com.careconnect.coreapi.childmgmt.jpa.Guardian;
 import com.careconnect.coreapi.childmgmt.repository.GuardianRepository;
 import com.careconnect.coreapi.common.exceptions.ResourceNotFoundException;
 import com.careconnect.coreapi.common.exceptions.ValidationException;
-import com.careconnect.coreapi.user.jpa.User;
-import com.careconnect.coreapi.user.repository.UserRepository;
+import com.careconnect.coreapi.user.User;
+import com.careconnect.coreapi.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import java.util.UUID;
 public class GuardianService {
 
     private final GuardianRepository guardianRepository;
-    private final UserRepository userRepository;
+    private final UserService userService; // Use service interface instead of repository
 
     public List<Guardian> getAllGuardians() {
         log.debug("Fetching all guardians");
@@ -41,7 +41,7 @@ public class GuardianService {
         validateGuardianData(guardian);
 
         // Check if user exists
-        User user = userRepository.findById(guardian.getUser().getId())
+        User user = userService.findUserEntityById(guardian.getUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + guardian.getUser().getId()));
 
         // Check if guardian already exists for this user
@@ -77,7 +77,7 @@ public class GuardianService {
         // Update user if provided and different
         if (guardianData.getUser() != null && guardianData.getUser().getId() != null &&
             !guardianData.getUser().getId().equals(existingGuardian.getUser().getId())) {
-            User user = userRepository.findById(guardianData.getUser().getId())
+            User user = userService.findUserEntityById(guardianData.getUser().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + guardianData.getUser().getId()));
             existingGuardian.setUser(user);
         }

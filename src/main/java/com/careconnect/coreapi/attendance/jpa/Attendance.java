@@ -1,7 +1,7 @@
 package com.careconnect.coreapi.attendance.jpa;
 
 import com.careconnect.coreapi.childmgmt.jpa.Child;
-import com.careconnect.coreapi.facility.jpa.Facility;
+import com.careconnect.coreapi.facility.Facility;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

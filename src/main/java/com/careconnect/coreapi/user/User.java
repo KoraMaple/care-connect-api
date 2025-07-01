@@ -1,4 +1,4 @@
-package com.careconnect.coreapi.user.jpa;
+package com.careconnect.coreapi.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;

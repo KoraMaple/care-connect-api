@@ -1,6 +1,6 @@
 package com.careconnect.coreapi.childmgmt.jpa;
 
-import com.careconnect.coreapi.user.jpa.User;
+import com.careconnect.coreapi.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
