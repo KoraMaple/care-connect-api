@@ -1,8 +1,8 @@
-package com.careconnect.coreapi.childmgmt.internal;
+package com.careconnect.coreapi.childmgmt.internal.service;
 
 import com.careconnect.coreapi.childmgmt.domain.Child;
-import com.careconnect.coreapi.childmgmt.internal.ChildRepository;
-import com.careconnect.coreapi.childmgmt.internal.GuardianRepository;
+import com.careconnect.coreapi.childmgmt.internal.repository.ChildRepository;
+import com.careconnect.coreapi.childmgmt.internal.repository.GuardianRepository;
 import com.careconnect.coreapi.common.exceptions.ResourceNotFoundException;
 import com.careconnect.coreapi.common.exceptions.ValidationException;
 import com.careconnect.coreapi.common.response.PageResponse;

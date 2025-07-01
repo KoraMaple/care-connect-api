@@ -1,7 +1,7 @@
-package com.careconnect.coreapi.childmgmt.internal;
+package com.careconnect.coreapi.childmgmt.internal.controller;
 
 import com.careconnect.coreapi.childmgmt.domain.Guardian;
-import com.careconnect.coreapi.childmgmt.internal.GuardianService;
+import com.careconnect.coreapi.childmgmt.internal.service.GuardianService;
 import com.careconnect.coreapi.common.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

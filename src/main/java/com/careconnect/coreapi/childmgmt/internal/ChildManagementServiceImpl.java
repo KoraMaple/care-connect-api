@@ -5,6 +5,8 @@ import com.careconnect.coreapi.childmgmt.api.ChildManagementService;
 import com.careconnect.coreapi.childmgmt.api.GuardianInfo;
 import com.careconnect.coreapi.childmgmt.domain.Child;
 import com.careconnect.coreapi.childmgmt.domain.Guardian;
+import com.careconnect.coreapi.childmgmt.internal.repository.ChildRepository;
+import com.careconnect.coreapi.childmgmt.internal.repository.GuardianRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

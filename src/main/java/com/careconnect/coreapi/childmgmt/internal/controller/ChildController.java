@@ -1,10 +1,12 @@
-package com.careconnect.coreapi.childmgmt.internal;
+package com.careconnect.coreapi.childmgmt.internal.controller;
 
 import com.careconnect.coreapi.childmgmt.domain.Child;
 import com.careconnect.coreapi.childmgmt.domain.ChildGuardian;
 import com.careconnect.coreapi.childmgmt.domain.Guardian;
 import com.careconnect.coreapi.childmgmt.dto.ChildRequestDto;
 import com.careconnect.coreapi.childmgmt.dto.ChildResponseDto;
+import com.careconnect.coreapi.childmgmt.internal.service.ChildGuardianService;
+import com.careconnect.coreapi.childmgmt.internal.service.ChildService;
 import com.careconnect.coreapi.common.response.ApiResponse;
 import com.careconnect.coreapi.common.response.PageResponse;
 import jakarta.validation.Valid;

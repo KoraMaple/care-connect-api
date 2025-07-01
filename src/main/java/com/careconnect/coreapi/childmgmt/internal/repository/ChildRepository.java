@@ -1,4 +1,4 @@
-package com.careconnect.coreapi.childmgmt.internal;
+package com.careconnect.coreapi.childmgmt.internal.repository;
 
 import com.careconnect.coreapi.childmgmt.domain.Child;
 import org.springframework.data.domain.Page;

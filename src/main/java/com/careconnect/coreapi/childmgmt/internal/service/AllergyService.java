@@ -1,11 +1,11 @@
-package com.careconnect.coreapi.childmgmt.internal;
+package com.careconnect.coreapi.childmgmt.internal.service;
 
 import com.careconnect.coreapi.childmgmt.domain.Allergy;
 import com.careconnect.coreapi.childmgmt.domain.Child;
 import com.careconnect.coreapi.childmgmt.domain.ChildAllergy;
-import com.careconnect.coreapi.childmgmt.internal.AllergyRepository;
-import com.careconnect.coreapi.childmgmt.internal.ChildAllergyRepository;
-import com.careconnect.coreapi.childmgmt.internal.ChildRepository;
+import com.careconnect.coreapi.childmgmt.internal.repository.AllergyRepository;
+import com.careconnect.coreapi.childmgmt.internal.repository.ChildAllergyRepository;
+import com.careconnect.coreapi.childmgmt.internal.repository.ChildRepository;
 import com.careconnect.coreapi.common.exceptions.DuplicateResourceException;
 import com.careconnect.coreapi.common.exceptions.ResourceNotFoundException;
 import com.careconnect.coreapi.common.exceptions.ValidationException;
