@@ -1,4 +1,4 @@
-package com.careconnect.coreapi.attendance.jpa;
+package com.careconnect.coreapi.attendance.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

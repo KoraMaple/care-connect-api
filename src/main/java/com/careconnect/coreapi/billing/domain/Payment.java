@@ -1,4 +1,4 @@
-package com.careconnect.coreapi.billing.jpa;
+package com.careconnect.coreapi.billing.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

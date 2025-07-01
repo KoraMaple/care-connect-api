@@ -1,9 +1,9 @@
 package com.careconnect.coreapi.childmgmt.service;
 
-import com.careconnect.coreapi.childmgmt.jpa.Child;
-import com.careconnect.coreapi.childmgmt.jpa.Guardian;
-import com.careconnect.coreapi.childmgmt.repository.ChildRepository;
-import com.careconnect.coreapi.childmgmt.repository.GuardianRepository;
+import com.careconnect.coreapi.childmgmt.domain.Child;
+import com.careconnect.coreapi.childmgmt.domain.Guardian;
+import com.careconnect.coreapi.childmgmt.internal.ChildRepository;
+import com.careconnect.coreapi.childmgmt.internal.GuardianRepository;
 import com.careconnect.coreapi.common.exceptions.ResourceNotFoundException;
 import com.careconnect.coreapi.common.exceptions.ValidationException;
 import org.junit.jupiter.api.BeforeEach;

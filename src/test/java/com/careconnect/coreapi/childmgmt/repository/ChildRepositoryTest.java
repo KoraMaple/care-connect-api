@@ -1,7 +1,7 @@
 package com.careconnect.coreapi.childmgmt.repository;
 
-import com.careconnect.coreapi.childmgmt.jpa.Child;
-import com.careconnect.coreapi.childmgmt.jpa.Guardian;
+import com.careconnect.coreapi.childmgmt.domain.Child;
+import com.careconnect.coreapi.childmgmt.domain.Guardian;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

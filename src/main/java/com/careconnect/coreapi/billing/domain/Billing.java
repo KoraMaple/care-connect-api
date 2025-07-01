@@ -1,41 +1,39 @@
-package com.careconnect.coreapi.attendance.jpa;
+package com.careconnect.coreapi.billing.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "attendance")
-public class Attendance {
+@Table(name = "billing")
+public class Billing {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @ColumnDefault("gen_random_uuid()")
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
-    @Column(name = "child_id", nullable = false)
-    private UUID childId;
+    @Column(name = "guardian_id", nullable = false)
+    private UUID guardianId;
 
-    @Column(name = "facility_id")
-    private UUID facilityId;
+    @Column(name = "amount", precision = 65, scale = 30)
+    private BigDecimal amount;
 
-    @Column(name = "check_in")
-    private Instant checkIn;
-
-    @Column(name = "check_out")
-    private Instant checkOut;
+    @Column(name = "due_date")
+    private Instant dueDate;
 
     @Column(name = "status", length = Integer.MAX_VALUE)
     private String status;
 
-    @Column(name = "notes", length = Integer.MAX_VALUE)
-    private String notes;
+    @Column(name = "description", length = Integer.MAX_VALUE)
+    private String description;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", nullable = false)

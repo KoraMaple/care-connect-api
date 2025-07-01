@@ -1,5 +1,6 @@
-package com.careconnect.coreapi.facility;
+package com.careconnect.coreapi.facility.internal;
 
+import com.careconnect.coreapi.facility.api.FacilityInfo;
 import java.util.Optional;
 import java.util.UUID;
 
