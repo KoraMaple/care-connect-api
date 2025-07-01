@@ -1,4 +1,4 @@
-package com.careconnect.coreapi.childmgmt.jpa;
+package com.careconnect.coreapi.childmgmt.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,8 +13,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "child_allergies")
-public class ChildAllergy {
+@Table(name = "enrollments")
+public class Enrollment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @ColumnDefault("gen_random_uuid()")
@@ -26,13 +26,21 @@ public class ChildAllergy {
     @JoinColumn(name = "child_id", nullable = false)
     private Child child;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "allergy_id", nullable = false)
-    private Allergy allergy;
+    @Column(name = "start_date")
+    private Instant startDate;
 
-    @Column(name = "notes", length = Integer.MAX_VALUE)
-    private String notes;
+    @Column(name = "end_date")
+    private Instant endDate;
+
+    @Column(name = "status", length = Integer.MAX_VALUE)
+    private String status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "enrolled_by_guardian_id")
+    private ChildGuardian enrolledBy;
+
+    @Column(name = "admin_sign_off_id")
+    private UUID adminSignOffId;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", nullable = false)

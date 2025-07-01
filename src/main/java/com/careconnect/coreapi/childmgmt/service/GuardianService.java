@@ -4,7 +4,6 @@ import com.careconnect.coreapi.childmgmt.jpa.Guardian;
 import com.careconnect.coreapi.childmgmt.repository.GuardianRepository;
 import com.careconnect.coreapi.common.exceptions.ResourceNotFoundException;
 import com.careconnect.coreapi.common.exceptions.ValidationException;
-import com.careconnect.coreapi.user.User;
 import com.careconnect.coreapi.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,21 +35,20 @@ public class GuardianService {
     }
 
     public Guardian createGuardian(Guardian guardian) {
-        log.debug("Creating new guardian for user ID: {}", guardian.getUser().getId());
+        log.debug("Creating new guardian for user ID: {}", guardian.getUserId());
 
         validateGuardianData(guardian);
 
         // Check if user exists
-        User user = userService.findUserEntityById(guardian.getUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + guardian.getUser().getId()));
+        userService.findUserEntityById(guardian.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + guardian.getUserId()));
 
         // Check if guardian already exists for this user
-        if (guardianRepository.findByUserId(guardian.getUser().getId()).isPresent()) {
+        if (guardianRepository.findByUserId(guardian.getUserId()).isPresent()) {
             throw new ValidationException("Guardian already exists for this user");
         }
 
         guardian.setId(null); // Ensure new entity
-        guardian.setUser(user);
         guardian.setCreatedAt(Instant.now());
         guardian.setUpdatedAt(Instant.now());
 
@@ -75,11 +73,11 @@ public class GuardianService {
         existingGuardian.setUpdatedAt(Instant.now());
 
         // Update user if provided and different
-        if (guardianData.getUser() != null && guardianData.getUser().getId() != null &&
-            !guardianData.getUser().getId().equals(existingGuardian.getUser().getId())) {
-            User user = userService.findUserEntityById(guardianData.getUser().getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + guardianData.getUser().getId()));
-            existingGuardian.setUser(user);
+        if (guardianData.getUserId() != null &&
+            !guardianData.getUserId().equals(existingGuardian.getUserId())) {
+            userService.findUserEntityById(guardianData.getUserId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + guardianData.getUserId()));
+            existingGuardian.setUserId(guardianData.getUserId());
         }
 
         Guardian updatedGuardian = guardianRepository.save(existingGuardian);
@@ -106,8 +104,8 @@ public class GuardianService {
     }
 
     private void validateGuardianData(Guardian guardian) {
-        if (guardian.getUser() == null || guardian.getUser().getId() == null) {
-            throw new ValidationException("User is required");
+        if (guardian.getUserId() == null) {
+            throw new ValidationException("User ID is required");
         }
 
         if (guardian.getRelationship() == null || guardian.getRelationship().trim().isEmpty()) {

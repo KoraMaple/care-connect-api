@@ -4,24 +4,33 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.modulith.ApplicationModule;
 
 /**
- * User module using CONVENTION OVER CONFIGURATION approach.
+ * User Module - Domain Boundary Definition
  * 
- * EXPOSED BY DEFAULT (no package-info.java needed):
- * - User.java (entity)
- * - UserService.java (interface) 
- * - UserInfo.java (DTO)
+ * This module is responsible for:
+ * - User registration and management
+ * - Integration with Clerk authentication system
+ * - User lifecycle events
  * 
- * HIDDEN BY DEFAULT:
- * - internal.* (all implementation details)
+ * PUBLIC API (automatically exposed):
+ * - UserService - Legacy interface for backwards compatibility
+ * - UserInfo - Data transfer object
+ * - api.UserManagement - Modern command/query API
+ * - events.* - Domain events for other modules to listen to
  * 
- * RESULT: Zero package-info.java files needed!
+ * INTERNAL IMPLEMENTATION (automatically hidden):
+ * - internal.* - All implementation details
+ * - domain.* - Domain entities and business logic
+ * 
+ * MODULE BOUNDARIES:
+ * - Depends only on: common (shared utilities)
+ * - No direct access to other domain modules
+ * - Communicates via events for loose coupling
  */
 @Configuration
 @ApplicationModule(
     allowedDependencies = {"common"}
 )
 public class UserModule {
-    // Convention over Configuration:
-    // - Public API classes are in the root package (auto-exposed)
-    // - Implementation details are in internal/ package (auto-hidden)
+    // This class defines the module boundary using Spring Modulith conventions
+    // No explicit @NamedInterface annotations needed - using package structure conventions
 }

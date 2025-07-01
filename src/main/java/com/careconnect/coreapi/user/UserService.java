@@ -1,5 +1,7 @@
 package com.careconnect.coreapi.user;
 
+import com.careconnect.coreapi.user.domain.User;
+
 import java.util.Optional;
 import java.util.UUID;
 

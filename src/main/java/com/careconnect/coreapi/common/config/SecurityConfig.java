@@ -17,27 +17,48 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    
     private final RequestAuthenticationFilter requestAuthenticationFilter;
+    private final SecurityProperties securityProperties;
 
     @Value("${app.allowed-origins}")
     private List<String> allowedOrigins;
 
-    public SecurityConfig(RequestAuthenticationFilter requestAuthenticationFilter) {
+    public SecurityConfig(RequestAuthenticationFilter requestAuthenticationFilter, 
+                         SecurityProperties securityProperties) {
         this.requestAuthenticationFilter = requestAuthenticationFilter;
+        this.securityProperties = securityProperties;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(
-                        authorizeRequests ->
-                                authorizeRequests.anyRequest().permitAll()
-                )
-                .csrf(Customizer.withDefaults());
-
-        httpSecurity
+        httpSecurity.cors(Customizer.withDefaults());
+        
+        if (!securityProperties.isEnabled()) {
+            // Completely disable security for testing
+            httpSecurity
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable());
+        } else {
+            // Configure with public endpoints from properties
+            httpSecurity
+                .authorizeHttpRequests(authorizeRequests -> {
+                    var authConfig = authorizeRequests;
+                    
+                    // Add public endpoints from configuration
+                    if (!securityProperties.getPublicEndpoints().isEmpty()) {
+                        String[] publicEndpoints = securityProperties.getPublicEndpoints()
+                            .toArray(new String[0]);
+                        authConfig = authConfig.requestMatchers(publicEndpoints).permitAll();
+                    }
+                    
+                    // All other requests require authentication
+                    authConfig.anyRequest().authenticated();
+                })
+                .csrf(csrf -> csrf.disable())
                 .addFilterBefore(requestAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        }
+        
         return httpSecurity.build();
     }
 

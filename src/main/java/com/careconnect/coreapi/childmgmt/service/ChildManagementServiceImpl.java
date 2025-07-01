@@ -53,7 +53,7 @@ public class ChildManagementServiceImpl implements ChildManagementService {
             guardian.getRelationship(),
             guardian.getEmergencyContact(),
             guardian.getPickupAuthorized(),
-            guardian.getUser() != null ? guardian.getUser().getId() : null
+            guardian.getUserId()
         );
     }
 }

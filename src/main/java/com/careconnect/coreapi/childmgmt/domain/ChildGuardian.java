@@ -1,4 +1,4 @@
-package com.careconnect.coreapi.childmgmt.jpa;
+package com.careconnect.coreapi.childmgmt.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
