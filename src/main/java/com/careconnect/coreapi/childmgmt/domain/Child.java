@@ -12,6 +12,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -57,10 +59,58 @@ public class Child {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
+    // Primary guardian (legacy/direct relationship)
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "guardian_id")
-    @JsonIgnore
     private Guardian guardian;
+    
+    // All guardians through the join table
+    @OneToMany(mappedBy = "child", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ChildGuardian> childGuardians = new ArrayList<>();
+    
+    // Return primary guardian ID (legacy method)
+    public UUID getGuardianId() {
+        return guardian != null ? guardian.getId() : null;
+    }
+    
+    // Return all guardian IDs
+    public List<UUID> getAllGuardianIds() {
+        if (childGuardians == null || childGuardians.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return childGuardians.stream()
+                .map(cg -> cg.getGuardian().getId())
+                .toList();
+    }
+    
+    // Return all guardians
+    public List<Guardian> getAllGuardians() {
+        if (childGuardians == null || childGuardians.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return childGuardians.stream()
+                .map(ChildGuardian::getGuardian)
+                .toList();
+    }
+    
+    // Return primary guardian (from child_guardians table)
+    public Guardian getPrimaryGuardian() {
+        if (childGuardians == null || childGuardians.isEmpty()) {
+            return null;
+        }
+        return childGuardians.stream()
+                .filter(cg -> Boolean.TRUE.equals(cg.getPrimaryGuardian()))
+                .map(ChildGuardian::getGuardian)
+                .findFirst()
+                .orElse(null);
+    }
+    
+    // Return primary guardian ID (from child_guardians table)
+    public UUID getPrimaryGuardianId() {
+        Guardian primaryGuardian = getPrimaryGuardian();
+        return primaryGuardian != null ? primaryGuardian.getId() : null;
+    }
 
 }
