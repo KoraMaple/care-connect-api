@@ -1,6 +1,6 @@
-package com.careconnect.coreapi.childmgmt.repository;
+package com.careconnect.coreapi.childmgmt.internal;
 
-import com.careconnect.coreapi.childmgmt.jpa.Child;
+import com.careconnect.coreapi.childmgmt.domain.Child;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

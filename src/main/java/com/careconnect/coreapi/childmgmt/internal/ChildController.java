@@ -1,4 +1,4 @@
-package com.careconnect.coreapi.childmgmt.controller;
+package com.careconnect.coreapi.childmgmt.internal;
 
 import com.careconnect.coreapi.childmgmt.jpa.Child;
 import com.careconnect.coreapi.childmgmt.jpa.ChildGuardian;
