@@ -18,7 +18,6 @@ import java.util.UUID;
 public class Guardian {
     @Id
     @Column(name = "id", nullable = false)
-    @ColumnDefault("gen_random_uuid()")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
@@ -28,11 +27,11 @@ public class Guardian {
 
     @NotBlank(message = "Relationship is required")
     @Size(max = 50, message = "Relationship must not exceed 50 characters")
-    @Column(name = "relationship", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "relationship", nullable = false, length = 50)
     private String relationship;
 
     @Size(max = 500, message = "Emergency contact must not exceed 500 characters")
-    @Column(name = "emergency_contact", length = Integer.MAX_VALUE)
+    @Column(name = "emergency_contact", length = 500)
     private String emergencyContact;
 
     @ColumnDefault("false")

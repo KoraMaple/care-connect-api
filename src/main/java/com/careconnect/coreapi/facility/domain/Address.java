@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @ColumnDefault("gen_random_uuid()")
+    // @ColumnDefault("gen_random_uuid()") // Commented out for H2 test compatibility
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 

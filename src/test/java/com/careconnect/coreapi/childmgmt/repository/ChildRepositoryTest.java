@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +34,7 @@ class ChildRepositoryTest {
     @BeforeEach
     void setUp() {
         testGuardian = new Guardian();
+        testGuardian.setUserId(UUID.randomUUID()); // Add required userId
         testGuardian.setRelationship("Parent");
         testGuardian.setEmergencyContact("123-456-7890");
         testGuardian.setPickupAuthorized(true);

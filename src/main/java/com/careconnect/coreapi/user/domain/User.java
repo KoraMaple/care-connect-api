@@ -23,7 +23,6 @@ import java.util.UUID;
 public class User {
     @Id
     @Column(name = "id", nullable = false)
-    @ColumnDefault("gen_random_uuid()")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 

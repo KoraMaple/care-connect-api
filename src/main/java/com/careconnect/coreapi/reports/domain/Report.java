@@ -16,7 +16,6 @@ public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @ColumnDefault("gen_random_uuid()")
     @Column(name = "id")
     private UUID id;
 

@@ -17,21 +17,20 @@ import java.util.UUID;
 public class Allergy {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @ColumnDefault("gen_random_uuid()")
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @NotBlank(message = "Allergy name is required")
     @Size(max = 100, message = "Allergy name must not exceed 100 characters")
-    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
     @Size(max = 500, message = "Description must not exceed 500 characters")
-    @Column(name = "description", length = Integer.MAX_VALUE)
+    @Column(name = "description", length = 500)
     private String description;
 
     @Size(max = 20, message = "Severity must not exceed 20 characters")
-    @Column(name = "severity", length = Integer.MAX_VALUE)
+    @Column(name = "severity", length = 50)
     private String severity;
 
     @ColumnDefault("CURRENT_TIMESTAMP")

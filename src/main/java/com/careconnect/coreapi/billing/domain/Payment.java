@@ -19,7 +19,6 @@ import java.util.UUID;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @ColumnDefault("gen_random_uuid()")
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
