@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authorizeRequests ->
-                                authorizeRequests.anyRequest().authenticated()
+                                authorizeRequests.anyRequest().permitAll()
                 )
                 .csrf(Customizer.withDefaults());
 
