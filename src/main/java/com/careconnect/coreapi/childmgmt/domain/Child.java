@@ -63,17 +63,13 @@ public class Child {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "guardian_id")
+    @JsonIgnore
     private Guardian guardian;
     
     // All guardians through the join table
     @OneToMany(mappedBy = "child", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ChildGuardian> childGuardians = new ArrayList<>();
-    
-    // Return primary guardian ID (legacy method)
-    public UUID getGuardianId() {
-        return guardian != null ? guardian.getId() : null;
-    }
     
     // Return all guardian IDs
     public List<UUID> getAllGuardianIds() {
@@ -85,17 +81,8 @@ public class Child {
                 .toList();
     }
     
-    // Return all guardians
-    public List<Guardian> getAllGuardians() {
-        if (childGuardians == null || childGuardians.isEmpty()) {
-            return new ArrayList<>();
-        }
-        return childGuardians.stream()
-                .map(ChildGuardian::getGuardian)
-                .toList();
-    }
-    
     // Return primary guardian (from child_guardians table)
+    @JsonIgnore
     public Guardian getPrimaryGuardian() {
         if (childGuardians == null || childGuardians.isEmpty()) {
             return null;

@@ -3,6 +3,8 @@ package com.careconnect.coreapi.childmgmt.internal;
 import com.careconnect.coreapi.childmgmt.domain.Child;
 import com.careconnect.coreapi.childmgmt.domain.ChildGuardian;
 import com.careconnect.coreapi.childmgmt.domain.Guardian;
+import com.careconnect.coreapi.childmgmt.dto.ChildRequestDto;
+import com.careconnect.coreapi.childmgmt.dto.ChildResponseDto;
 import com.careconnect.coreapi.common.response.ApiResponse;
 import com.careconnect.coreapi.common.response.PageResponse;
 import jakarta.validation.Valid;
@@ -28,40 +30,58 @@ public class ChildController {
     private final ChildGuardianService childGuardianService;
 
     @GetMapping
-    public PageResponse<Child> getAllChildren(
+    public PageResponse<ChildResponseDto> getAllChildren(
             @PageableDefault(size = 20) Pageable pageable) {
         log.info("GET /api/children - Fetching all children with pagination: page={}, size={}", 
                 pageable.getPageNumber(), pageable.getPageSize());
 
-        return this.childService.getAllChildren(pageable);
+        // Get the service result and check if it returns PageResponse or Page
+        PageResponse<Child> childrenPageResponse = this.childService.getAllChildren(pageable);
+        
+        // Convert to safe DTOs
+        List<ChildResponseDto> safeChildren = ChildResponseDto.fromEntityList(childrenPageResponse.getData());
+        
+        return PageResponse.<ChildResponseDto>builder()
+                .data(safeChildren)
+                .meta(childrenPageResponse.getMeta())
+                .links(childrenPageResponse.getLinks())
+                .build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Child>> getChildById(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<ChildResponseDto>> getChildById(@PathVariable UUID id) {
         log.info("GET /api/children/{} - Fetching child by ID", id);
 
         Child child = childService.getChildById(id);
-        return ResponseEntity.ok(ApiResponse.success(child, "Child retrieved successfully"));
+        ChildResponseDto safeChild = ChildResponseDto.fromEntity(child);
+        return ResponseEntity.ok(ApiResponse.success(safeChild, "Child retrieved successfully"));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Child>> createChild(@Valid @RequestBody Child child) {
+    public ResponseEntity<ApiResponse<ChildResponseDto>> createChild(@Valid @RequestBody ChildRequestDto childRequest) {
         log.info("POST /api/children - Creating new child: {} {}",
-                child.getFirstName(), child.getLastName());
+                childRequest.getFirstName(), childRequest.getLastName());
 
+        // Convert sanitized DTO to entity
+        Child child = childRequest.toEntity();
         Child createdChild = childService.createChild(child);
+        ChildResponseDto safeChild = ChildResponseDto.fromEntity(createdChild);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(createdChild, "Child created successfully"));
+                .body(ApiResponse.success(safeChild, "Child created successfully"));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Child>> updateChild(
+    public ResponseEntity<ApiResponse<ChildResponseDto>> updateChild(
             @PathVariable UUID id,
-            @Valid @RequestBody Child child) {
+            @Valid @RequestBody ChildRequestDto childRequest) {
         log.info("PUT /api/children/{} - Updating child", id);
 
-        Child updatedChild = childService.updateChild(id, child);
-        return ResponseEntity.ok(ApiResponse.success(updatedChild, "Child updated successfully"));
+        // Get existing child and update with sanitized data
+        Child existingChild = childService.getChildById(id);
+        Child updatedData = childRequest.updateEntity(existingChild);
+        Child updatedChild = childService.updateChild(id, updatedData);
+        ChildResponseDto safeChild = ChildResponseDto.fromEntity(updatedChild);
+        return ResponseEntity.ok(ApiResponse.success(safeChild, "Child updated successfully"));
     }
 
     @DeleteMapping("/{id}")
@@ -73,7 +93,7 @@ public class ChildController {
     }
 
     @GetMapping("/search")
-    public PageResponse<Child> searchChildren(
+    public PageResponse<ChildResponseDto> searchChildren(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String gender,
             @PageableDefault(size = 20) Pageable pageable) {
@@ -81,7 +101,11 @@ public class ChildController {
                 name, gender);
 
         Page<Child> children = childService.searchChildren(name, gender, pageable);
-        return PageResponse.of(children);
+        
+        // Convert the Spring Page content to safe DTOs and create a new PageResponse
+        Page<ChildResponseDto> safePage = children.map(ChildResponseDto::fromEntity);
+        
+        return PageResponse.of(safePage);
     }
 
     @PostMapping("/{childId}/guardians")

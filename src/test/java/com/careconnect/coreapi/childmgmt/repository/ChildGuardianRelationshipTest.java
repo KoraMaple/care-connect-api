@@ -111,16 +111,12 @@ public class ChildGuardianRelationshipTest {
         // Retrieve the child and test the new methods
         Child retrievedChild = entityManager.find(Child.class, child.getId());
         
-        // Test legacy method (should still work)
-        assertThat(retrievedChild.getGuardianId()).isEqualTo(guardian1.getId());
         
         // Test new methods for multiple guardians
         List<UUID> allGuardianIds = retrievedChild.getAllGuardianIds();
         assertThat(allGuardianIds).hasSize(3);
         assertThat(allGuardianIds).contains(guardian1.getId(), guardian2.getId(), guardian3.getId());
         
-        List<Guardian> allGuardians = retrievedChild.getAllGuardians();
-        assertThat(allGuardians).hasSize(3);
         
         // Test primary guardian methods
         Guardian primaryGuardian = retrievedChild.getPrimaryGuardian();
@@ -151,9 +147,7 @@ public class ChildGuardianRelationshipTest {
         Child retrievedChild = entityManager.find(Child.class, child.getId());
         
         // Test all methods return empty/null safely
-        assertThat(retrievedChild.getGuardianId()).isNull();
         assertThat(retrievedChild.getAllGuardianIds()).isEmpty();
-        assertThat(retrievedChild.getAllGuardians()).isEmpty();
         assertThat(retrievedChild.getPrimaryGuardian()).isNull();
         assertThat(retrievedChild.getPrimaryGuardianId()).isNull();
     }
