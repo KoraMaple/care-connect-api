@@ -11,6 +11,7 @@ public class SecurityProperties {
     
     private boolean enabled = true;
     private List<String> publicEndpoints = List.of();
+
     
     public boolean isEnabled() {
         return enabled;

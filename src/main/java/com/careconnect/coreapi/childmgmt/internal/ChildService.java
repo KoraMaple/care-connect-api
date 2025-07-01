@@ -9,11 +9,7 @@ import com.careconnect.coreapi.common.response.PageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,12 +26,12 @@ public class ChildService {
     private final ChildRepository childRepository;
     private final GuardianRepository guardianRepository;
 
-    public PageResponse<Child> getAllChildren(int pageNumber, int pageSize) {
-        log.debug("Fetching all children with pagination: {}", pageNumber);
-//        return childRepository.findAll(pageable);
-        Page<Child> childrenPage = childRepository.findAll(PageRequest.of(pageNumber, pageSize));
-
-        return  new PageResponse<Child>(childrenPage);
+    public PageResponse<Child> getAllChildren(Pageable pageable) {
+        log.debug("Fetching all children with pagination: page={}, size={}, sort={}", 
+                pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
+        
+        Page<Child> childrenPage = childRepository.findAll(pageable);
+        return PageResponse.of(childrenPage);
     }
 
     public Child getChildById(UUID id) {

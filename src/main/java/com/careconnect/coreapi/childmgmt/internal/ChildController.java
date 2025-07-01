@@ -3,8 +3,6 @@ package com.careconnect.coreapi.childmgmt.internal;
 import com.careconnect.coreapi.childmgmt.domain.Child;
 import com.careconnect.coreapi.childmgmt.domain.ChildGuardian;
 import com.careconnect.coreapi.childmgmt.domain.Guardian;
-import com.careconnect.coreapi.childmgmt.internal.ChildGuardianService;
-import com.careconnect.coreapi.childmgmt.internal.ChildService;
 import com.careconnect.coreapi.common.response.ApiResponse;
 import com.careconnect.coreapi.common.response.PageResponse;
 import jakarta.validation.Valid;
@@ -13,9 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +29,11 @@ public class ChildController {
 
     @GetMapping
     public PageResponse<Child> getAllChildren(
-            @PageableDefault(size = 20) @RequestParam int pageNumber) {
-        log.info("GET /api/children - Fetching all children with pagination");
+            @PageableDefault(size = 20) Pageable pageable) {
+        log.info("GET /api/children - Fetching all children with pagination: page={}, size={}", 
+                pageable.getPageNumber(), pageable.getPageSize());
 
-        return this.childService.getAllChildren(pageNumber, 20);
+        return this.childService.getAllChildren(pageable);
     }
 
     @GetMapping("/{id}")
@@ -77,14 +73,15 @@ public class ChildController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<Page<Child>>> searchChildren(
+    public PageResponse<Child> searchChildren(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String gender,
             @PageableDefault(size = 20) Pageable pageable) {
-        log.info("GET /api/children/search - Searching children with criteria");
+        log.info("GET /api/children/search - Searching children with criteria: name={}, gender={}", 
+                name, gender);
 
         Page<Child> children = childService.searchChildren(name, gender, pageable);
-        return ResponseEntity.ok(ApiResponse.success(children, "Children search completed successfully"));
+        return PageResponse.of(children);
     }
 
     @PostMapping("/{childId}/guardians")
