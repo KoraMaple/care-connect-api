@@ -1,5 +1,6 @@
 package com.careconnect.coreapi.childmgmt.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -60,6 +61,7 @@ public class Child {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "guardian_id")
+    @JsonIgnore
     private Guardian guardian;
 
 }

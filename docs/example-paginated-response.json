@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "firstName": "John",
+      "lastName": "Doe",
+      "dob": "2018-06-15T00:00:00Z",
+      "gender": "Male",
+      "specialNeeds": null,
+      "emergencyContact": "Jane Doe - 555-1234",
+      "createdAt": "2025-01-01T10:00:00Z",
+      "updatedAt": "2025-01-01T10:00:00Z"
+    },
+    {
+      "id": "234e5678-e89b-12d3-a456-426614174001",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "dob": "2019-03-22T00:00:00Z",
+      "gender": "Female",
+      "specialNeeds": "Allergic to peanuts",
+      "emergencyContact": "Bob Smith - 555-5678",
+      "createdAt": "2025-01-01T11:00:00Z",
+      "updatedAt": "2025-01-01T11:00:00Z"
+    }
+  ],
+  "meta": {
+    "page_number": 0,
+    "page_size": 20,
+    "total_pages": 5,
+    "total_elements": 100,
+    "number_of_elements": 2,
+    "has_next": true,
+    "has_previous": false,
+    "is_first": true,
+    "is_last": false,
+    "is_empty": false,
+    "sort": null
+  },
+  "links": {
+    "self": "http://localhost:8080/api/children?page=0&size=20",
+    "first": "http://localhost:8080/api/children?page=0&size=20",
+    "last": "http://localhost:8080/api/children?page=4&size=20",
+    "next": "http://localhost:8080/api/children?page=1&size=20",
+    "previous": null
+  }
+}

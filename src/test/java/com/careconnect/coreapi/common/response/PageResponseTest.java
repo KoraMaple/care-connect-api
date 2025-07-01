@@ -127,7 +127,7 @@ class PageResponseTest {
         assertEquals(0, response.getData().size());
         assertTrue(response.getMeta().isEmpty());
         assertEquals(0, response.getMeta().getTotalElements());
-        assertEquals(1, response.getMeta().getTotalPages()); // Even empty results show 1 page
+        assertEquals(0, response.getMeta().getTotalPages()); // Empty page has 0 total pages
         assertFalse(response.getMeta().isHasNext());
         assertFalse(response.getMeta().isHasPrevious());
     }
