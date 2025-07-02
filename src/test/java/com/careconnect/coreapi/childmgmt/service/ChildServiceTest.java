@@ -7,6 +7,8 @@ import com.careconnect.coreapi.childmgmt.internal.service.ChildService;
 import com.careconnect.coreapi.childmgmt.internal.repository.GuardianRepository;
 import com.careconnect.coreapi.common.exceptions.ResourceNotFoundException;
 import com.careconnect.coreapi.common.exceptions.ValidationException;
+import com.careconnect.coreapi.common.response.PageResponse;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +27,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -72,13 +73,13 @@ class ChildServiceTest {
         when(childRepository.findAll(pageable)).thenReturn(childrenPage);
 
         // When
-//        Page<Child> result = childService.getAllChildren(pageable);
+        PageResponse<Child> result = childService.getAllChildren(pageable);
 
         // Then
-//        assertThat(result).isNotNull();
-//        assertThat(result.getContent()).hasSize(1);
-//        assertThat(result.getContent().get(0).getFirstName()).isEqualTo("John");
-//        verify(childRepository).findAll(pageable);
+        assertThat(result).isNotNull();
+        assertThat(result.getData()).hasSize(1);
+        assertThat(result.getData().get(0).getFirstName()).isEqualTo("John");
+        verify(childRepository).findAll(pageable);
     }
 
     @Test
@@ -187,7 +188,7 @@ class ChildServiceTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Child> childrenPage = new PageImpl<>(List.of(testChild));
 
-        when(childRepository.findByFilters(eq("John"), eq("Male"), eq(pageable)))
+        when(childRepository.findByFilters("John", "Male", pageable))
                 .thenReturn(childrenPage);
 
         // When

@@ -20,9 +20,6 @@ ALTER TABLE children
 ALTER TABLE children
     ALTER COLUMN gender TYPE VARCHAR(10) USING (gender::VARCHAR(10));
 
-ALTER TABLE addresses
-    ALTER COLUMN id SET DEFAULT gen_random_uuid();
-
 ALTER TABLE children
     ALTER COLUMN last_name TYPE VARCHAR(100) USING (last_name::VARCHAR(100));
 

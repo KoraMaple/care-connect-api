@@ -33,8 +33,20 @@ class ChildRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        // First, create a user in the users table
+        // Use native SQL to insert the user since we might not have a User entity in the test context
+        UUID userId = UUID.randomUUID();
+        entityManager.getEntityManager().createNativeQuery(
+            "INSERT INTO users (id, clerk_user_id, created_at, updated_at) VALUES (?, ?, ?, ?)")
+            .setParameter(1, userId)
+            .setParameter(2, "test_clerk_id_123")
+            .setParameter(3, Instant.now())
+            .setParameter(4, Instant.now())
+            .executeUpdate();
+        
+        // Now create the guardian with the user ID that exists in the users table
         testGuardian = new Guardian();
-        testGuardian.setUserId(UUID.randomUUID()); // Add required userId
+        testGuardian.setUserId(userId);  // Use the same UUID we inserted above
         testGuardian.setRelationship("Parent");
         testGuardian.setEmergencyContact("123-456-7890");
         testGuardian.setPickupAuthorized(true);
