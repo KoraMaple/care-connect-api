@@ -4,6 +4,7 @@ import com.clerk.backend_api.helpers.security.AuthenticateRequest;
 import com.clerk.backend_api.helpers.security.models.AuthenticateRequestOptions;
 import com.clerk.backend_api.helpers.security.models.MachineAuthVerificationData;
 import com.clerk.backend_api.helpers.security.models.RequestState;
+import com.careconnect.coreapi.common.config.SecurityProperties;
 import com.careconnect.coreapi.common.exceptions.AuthenticationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,12 +21,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class RequestAuthenticationFilter extends OncePerRequestFilter {
 
     private final Logger logger = LoggerFactory.getLogger(RequestAuthenticationFilter.class);
+    private final SecurityProperties securityProperties;
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Value("${clerk.api.secret-key}")
     private String clerkApiSecretKey;
@@ -33,9 +37,25 @@ public class RequestAuthenticationFilter extends OncePerRequestFilter {
     @Value("${clerk.api.authorized-parties}")
     private List<String> clerkApiAuthorizedParties;
 
+    public RequestAuthenticationFilter(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException {
+        
+        // Skip authentication if security is disabled or endpoint is public
+        if (!securityProperties.isEnabled() || isPublicEndpoint(request)) {
+            try {
+                filterChain.doFilter(request, response);
+            } catch (Exception e) {
+                logger.error("Error processing request", e);
+                sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
+            }
+            return;
+        }
+        
         try {
             Map<String, List<String>> headers = new HashMap<>();
             request.getHeaderNames().asIterator().forEachRemaining(headerName -> {
@@ -50,13 +70,16 @@ public class RequestAuthenticationFilter extends OncePerRequestFilter {
             );
 
             if (!state.isSignedIn()){
-                throw new AuthenticationException(state.reason().get().message());
+                String reason = state.reason().map(r -> r.message()).orElse("Unknown authentication error");
+                throw new AuthenticationException(reason);
             }
 
             // Debug: Log the state to see what's available
-            logger.debug("Authentication state: " + state);
-            if (state.claims().isPresent()) {
-                logger.debug("Claims: " + state.claims().get());
+            if (logger.isDebugEnabled()) {
+                logger.debug("Authentication state: {}", state);
+                if (state.claims().isPresent()) {
+                    logger.debug("Claims: {}", state.claims().get());
+                }
             }
 
             String userId = extractUserId(state);
@@ -64,7 +87,9 @@ public class RequestAuthenticationFilter extends OncePerRequestFilter {
                 throw new AuthenticationException("Unable to authenticate request, no user_id found in claims or token verification response");
             }
 
-            logger.debug("Authenticated user ID: " + userId);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Authenticated user ID: {}", userId);
+            }
             Authentication authentication = new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
@@ -75,6 +100,18 @@ public class RequestAuthenticationFilter extends OncePerRequestFilter {
             logger.error("Authentication error", e);
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Unable to authenticate request: " + e.getMessage());
         }
+    }
+
+    /**
+     * Checks if the request path matches any of the configured public endpoints.
+     *
+     * @param request The HTTP request
+     * @return true if the endpoint is public, false otherwise
+     */
+    private boolean isPublicEndpoint(HttpServletRequest request) {
+        String requestPath = request.getRequestURI();
+        return securityProperties.getPublicEndpoints().stream()
+                .anyMatch(pattern -> pathMatcher.match(pattern, requestPath));
     }
 
     /**
@@ -97,11 +134,19 @@ public class RequestAuthenticationFilter extends OncePerRequestFilter {
             }
 
             // Log all available claims for debugging
-            logger.debug("Available claims: " + claims.keySet());
+            if (logger.isDebugEnabled()) {
+                logger.debug("Available claims: {}", claims.keySet());
+            }
         }
         else if (state.tokenVerificationResponse().isPresent()){
             try {
-                return ((MachineAuthVerificationData) state.tokenVerificationResponse().get().payload()).getSubject();
+                var tokenResponseOpt = state.tokenVerificationResponse();
+                if (tokenResponseOpt.isPresent()) {
+                    var tokenResponse = tokenResponseOpt.get();
+                    if (tokenResponse.payload() instanceof MachineAuthVerificationData) {
+                        return ((MachineAuthVerificationData) tokenResponse.payload()).getSubject();
+                    }
+                }
             } catch (Exception e) {
                 logger.error("Error extracting subject from token verification response", e);
             }
