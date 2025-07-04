@@ -18,13 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
-public class ChildGuardianRelationshipTest {
+class ChildGuardianRelationshipTest {
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Test
-    public void testMultipleGuardians() {
+    void testMultipleGuardians() {
         // Create users
         User user1 = new User();
         user1.setClerkUserId("user1");
@@ -114,8 +114,7 @@ public class ChildGuardianRelationshipTest {
         
         // Test new methods for multiple guardians
         List<UUID> allGuardianIds = retrievedChild.getAllGuardianIds();
-        assertThat(allGuardianIds).hasSize(3);
-        assertThat(allGuardianIds).contains(guardian1.getId(), guardian2.getId(), guardian3.getId());
+        assertThat(allGuardianIds).hasSize(3).contains(guardian1.getId(), guardian2.getId(), guardian3.getId());
         
         
         // Test primary guardian methods
@@ -129,7 +128,7 @@ public class ChildGuardianRelationshipTest {
     }
 
     @Test
-    public void testChildWithNoGuardians() {
+    void testChildWithNoGuardians() {
         // Create child without any guardians
         Child child = new Child();
         child.setFirstName("Bob");

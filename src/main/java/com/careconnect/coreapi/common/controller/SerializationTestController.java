@@ -1,5 +1,6 @@
 package com.careconnect.coreapi.common.controller;
 
+import lombok.Getter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,7 @@ public class SerializationTestController {
         return new TestResponse("Instant serialization test", Instant.now());
     }
     
+    @Getter
     public static class TestResponse {
         private String message;
         private Instant timestamp;
@@ -36,13 +38,6 @@ public class SerializationTestController {
             this.message = message;
             this.timestamp = timestamp;
         }
-        
-        public String getMessage() {
-            return message;
-        }
-        
-        public Instant getTimestamp() {
-            return timestamp;
-        }
+
     }
 }
